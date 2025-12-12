@@ -65,3 +65,17 @@ REACT_APP_REFRESH_MS=120000
 Notes:
 - Do not commit `.env` with secrets or credentials; commit only `.env.example`.
 - For production, set environment variables via your host dashboard (Render or Vercel) or using repository secrets + CI.
+
+### GitHub Actions → Deploy to Render / Vercel
+To automate deploys via GitHub Actions, add the following repository secrets (Settings → Secrets → Actions):
+
+- Render (optional):
+	- `RENDER_API_KEY` — the Render API key (for the account).
+	- `RENDER_SERVICE_ID` — the Render service ID for the server (web service).
+	- `RENDER_STATIC_ID` — the Render service ID for the client static site (optional if you separate services).
+- Vercel (optional):
+	- `VERCEL_TOKEN` — Vercel access token for your account.
+	- `VERCEL_ORG_ID` — Vercel organization ID for the project.
+	- `VERCEL_PROJECT_ID` — Vercel project ID for the `client` project.
+
+The repository includes a `ci-cd.yml` workflow that optionally triggers Render/Vercel deploys if those secrets are set. To trigger deploys from Actions, ensure the secrets are added and push to the `main` branch.

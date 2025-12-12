@@ -1,0 +1,28 @@
+services:
+  - type: web_service
+    name: windborne-challenge-server
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: cd client && npm ci && npm run build && cd ../server && npm ci
+    startCommand: cd server && npm start
+    repo: https://github.com/Avaneeshakrishna/windborne-challenge
+    branch: main
+    envVars:
+      - key: PORT
+        value: "4000"
+      - key: REFRESH_INTERVAL_MS
+        value: "300000"
+      - key: ALLOWED_ORIGINS
+        value: "https://example-client.onrender.com"
+
+static_sites:
+  - name: windborne-challenge-client
+    repo: https://github.com/Avaneeshakrishna/windborne-challenge
+    branch: main
+    path: client
+    buildCommand: npm ci && npm run build
+    publishPath: client/build
+    envVars:
+      - key: REACT_APP_API_BASE
+        value: "https://example-server.onrender.com"

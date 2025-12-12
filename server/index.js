@@ -1,11 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const path = require('path');
+const fs = require('fs');
 
 const PORT = Number(process.env.PORT || 4000);
 const REFRESH_INTERVAL_MS = Number(process.env.REFRESH_INTERVAL_MS || 5 * 60 * 1000);
 const MAX_LOOKBACK_HOURS = 24;
-const WIND_BASE_URL = 'https://a.windbornesystems.com/treasure';
+const WIND_BASE_URL = process.env.WIND_BASE_URL || 'https://a.windbornesystems.com/treasure';
 const EARTHQUAKE_URL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';
 
 const app = express();
@@ -343,8 +346,22 @@ async function bootstrap() {
   setInterval(refreshData, REFRESH_INTERVAL_MS);
 
   app.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`);
-  });
+      console.log(`Server listening on http://localhost:${PORT}`);
+    });
+
+  // Serve client static build if available (single-host mode)
+  try {
+    const clientBuildPath = path.join(__dirname, '..', 'client', 'build');
+    if (fs.existsSync(clientBuildPath)) {
+      console.log('Serving static client build from', clientBuildPath);
+      app.use(express.static(clientBuildPath));
+      app.get('*', (_req, res) => {
+        res.sendFile(path.join(clientBuildPath, 'index.html'));
+      });
+    }
+  } catch (e) {
+    // ignore; the client build isn't present
+  }
 }
 
 bootstrap().catch((err) => {
