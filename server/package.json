@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
+    "postinstall": "npm --prefix ../client install && npm --prefix ../client run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

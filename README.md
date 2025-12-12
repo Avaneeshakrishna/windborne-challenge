@@ -25,7 +25,22 @@ Per the challenge instructions, send questions through a POST request to the bac
 
 ### Deployment
 
-Deploy the Express server to your preferred host (e.g. Render/Fly/Heroku) and expose it over HTTPS. Then build the React app (`npm run build`) and serve it via a static host (Netlify/Vercel/S3) configured to hit the deployed API URL via `REACT_APP_API_BASE`.
+Deploy the Express server to your preferred host (e.g. Render/Fly/Heroku) and expose it over HTTPS. You have two common options:
+
+1) Single-host (serve UI + API from one Render Web Service)
+	- Set the Render service "Root Directory" to `server`.
+	- Build Command: `npm install` (the server's `postinstall` installs and builds the client)
+	- Start Command: `npm start`
+	- Ensure `ALLOWED_ORIGINS` contains your frontend URL (or set to `*` for open CORS during testing).
+	- The server will serve `client/build` automatically when present.
+
+2) Separate-host (API backend + static frontend)
+	- Deploy the `server` to a web service (Render/Fly/Heroku) with Build `npm install` and Start `npm start`.
+	- Deploy the `client` to a static host (Vercel/Render static/Netlify) with Build `npm install` and `npm run build`.
+	- In the `client` project settings, set `REACT_APP_API_BASE` to your backend URL (e.g. `https://<backend>.onrender.com`).
+	- On the backend, set `ALLOWED_ORIGINS` to the frontend origin.
+
+If you are using Render for a combined single host, the server's `postinstall` runs during the build step and produces `client/build` for the Express app to serve the client automatically.
 
 ### Environment variables
 There are environment variables for both the server and the client used to customize runtime behavior and connection endpoints.
