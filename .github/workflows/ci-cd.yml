@@ -34,13 +34,13 @@ jobs:
       - name: Install & test server
         working-directory: ./server
         run: |
-          npm ci
+          npm install
           npm test || true
 
       - name: Install & build client
         working-directory: ./client
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Upload client build artifact
@@ -106,7 +106,7 @@ jobs:
       - name: Build client and copy to server/public
         run: |
           cd client
-          npm ci
+          npm install
           npm run build
           mkdir -p ../server/public
           rm -rf ../server/public/*
