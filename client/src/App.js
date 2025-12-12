@@ -372,10 +372,6 @@ function App() {
               External dataset: I chose the USGS real-time earthquake GeoJSON feed because it is unauthenticated,
               global, and offers high-impact context about seismic events happening near the balloons.
             </p>
-            <p>
-              Have questions? POST them to our backend (e.g. `POST /api/questions`) with contact info—we will reply
-              there per the challenge instructions.
-            </p>
           </div>
         </section>
       </main>
